@@ -1,0 +1,12 @@
+.env
+db_credentials.txt
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
