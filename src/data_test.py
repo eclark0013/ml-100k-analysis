@@ -2,7 +2,7 @@ import pandas as pd
 import os
 
 # Define the folder where data is extracted
-extract_folder = "ml-100k"
+extract_folder = "data/raw/ml-100k"
 
 # List all files in the folder
 print("Files in dataset folder:", os.listdir(extract_folder))
