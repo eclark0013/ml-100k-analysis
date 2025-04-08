@@ -14,4 +14,10 @@ SELECT
         r1.user_id < r2.user_id -- makes sure they are not the same user and prevents dupliates with users in switched spots
     GROUP BY r1.user_id, r2.user_id
     ORDER BY COUNT(*) DESC
-    LIMIT 50
+    LIMIT 50;
+
+    SELECT 
+    movie_id,
+    AVG(rating) 
+FROM ratings WHERE movie_id IN (1, 2, 3)
+GROUP BY movie_id;

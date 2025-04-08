@@ -17,6 +17,24 @@ import psycopg2
 # Load .env file
 load_dotenv()
 
+def execute_in_query(cursor, base_query, values):
+    if not values:
+        return values
+    placeholders = ", ".join(['%s']*len(values))
+    query = base_query.format(placeholders)
+    cursor.execute(query, values)
+    return cursor.fetchall()
+
+def get_top_rated_movies(cursor, movie_ids):
+    base_query = """ 
+    SELECT 
+        movie_id,
+        AVG(rating) 
+    FROM ratings WHERE movie_id IN ({})
+    GROUP BY movie_id
+    ORDER BY AVG(rating) DESC; """
+    return execute_in_query(cursor, base_query, movie_ids)
+
 # Get database credentials from environment variables
 conn = psycopg2.connect(
     dbname=os.getenv("DB_NAME"),
@@ -26,14 +44,15 @@ conn = psycopg2.connect(
     port=os.getenv("DB_PORT")
 )
 
-cur = conn.cursor()
+cursor = conn.cursor()
 
+movie_ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
-cur.execute("SELECT AVG(rating) FROM ratings WHERE movie_id = 512 GROUP BY movie_id;")
-results = cur.fetchall()
-print(results[0])
+top_rated_movies = get_top_rated_movies(cursor, movie_ids)
 
+for row in top_rated_movies:
+    print(row)
 
 # Close the connection
-cur.close()
+cursor.close()
 conn.close()
