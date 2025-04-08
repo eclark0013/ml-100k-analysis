@@ -93,7 +93,7 @@ def similar_user(subject_id):
         print("No similar users")
         return None
 
-similar_user(848)
+similar_user(560)
 
 # Close the connection
 cur.close()

@@ -1,18 +1,18 @@
 COPY users
-FROM '/Users/ericclark/Desktop/DataScience/Projects/relatively/ml-100k/u.user' 
+FROM '/Users/ericclark/DataScience/Projects/ml-100k-analysis/data/raw/ml-100k/u.user' 
 WITH (FORMAT TEXT, DELIMITER E'|');
 
 COPY staging_movies_3
-FROM '/Users/ericclark/Desktop/DataScience/Projects/relatively/ml-100k/u.item.cleaned'
+FROM '/Users/ericclark/DataScience/Projects/ml-100k-analysis/data/raw/ml-100k/u.item.cleaned'
 WITH (FORMAT TEXT, DELIMITER '|');
 
 COPY movies
-FROM '/Users/ericclark/Desktop/DataScience/Projects/relatively/ml-100k/u.item.cleaned' 
+FROM '/Users/ericclark/DataScience/Projects/ml-100k-analysis/data/raw/ml-100k/u.item.cleaned' 
 WITH (FORMAT TEXT, DELIMITER E'|');
 
 
 COPY ratings (user_id, movie_id, rating, timestamp)
-FROM '/Users/ericclark/Desktop/DataScience/Projects/relatively/ml-100k/u.data'
+FROM '/Users/ericclark/DataScience/Projects/ml-100k-analysis/data/raw/ml-100k/u.data'
 WITH (FORMAT text, DELIMITER E'\t');
 
 SELECT COUNT(*) FROM staging_movies_3 
