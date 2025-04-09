@@ -28,12 +28,24 @@ def execute_in_query(cursor, base_query, values):
 def get_top_rated_movies(cursor, movie_ids):
     base_query = """ 
     SELECT 
-        movie_id,
-        AVG(rating) 
-    FROM ratings WHERE movie_id IN ({})
-    GROUP BY movie_id
+        ratings.movie_id,
+        LEFT(title, LENGTH(movies.title)-7) AS title,
+        ROUND(AVG(rating), 2) 
+    FROM ratings JOIN movies ON 
+        ratings.movie_id = movies.movie_id
+    WHERE ratings.movie_id IN ({})
+    GROUP BY ratings.movie_id, movies.title
     ORDER BY AVG(rating) DESC; """
     return execute_in_query(cursor, base_query, movie_ids)
+
+def get_top_rated_movies_df(cursor, movie_ids):
+    top_rated_movies = get_top_rated_movies(cursor, movie_ids)
+
+    df = pd.DataFrame(top_rated_movies, columns=['movie_id', 'title', 'avg_rating'])
+
+    return df
+
+
 
 # Get database credentials from environment variables
 conn = psycopg2.connect(
@@ -48,10 +60,8 @@ cursor = conn.cursor()
 
 movie_ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
-top_rated_movies = get_top_rated_movies(cursor, movie_ids)
-
-for row in top_rated_movies:
-    print(row)
+df = get_top_rated_movies_df(cursor, movie_ids)
+print(df)
 
 # Close the connection
 cursor.close()
